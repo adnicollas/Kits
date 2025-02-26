@@ -1,0 +1,11 @@
+name: Kits
+version: 1.0.0
+main: br.ynicollas.kits.KitsPlugin
+author: yNicollas
+commands:
+  createkit:
+    aliases: [criarkit]
+  deletekit:
+    aliases: [delkit]
+  kit:
+    aliases: []
