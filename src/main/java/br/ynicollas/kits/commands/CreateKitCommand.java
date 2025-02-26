@@ -31,7 +31,7 @@ public class CreateKitCommand implements CommandExecutor {
             return false;
         }
 
-        String kitId = args[0];
+        String kitId = args[0].toLowerCase();
         String permission = args[1];
         String cooldownStr = args[2];
 

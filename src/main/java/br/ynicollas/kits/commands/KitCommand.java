@@ -35,7 +35,7 @@ public class KitCommand implements CommandExecutor {
             return false;
         }
 
-        String id = args[0];
+        String id = args[0].toLowerCase();
 
         Kit kit = kitStorage.getKit(id);
 
