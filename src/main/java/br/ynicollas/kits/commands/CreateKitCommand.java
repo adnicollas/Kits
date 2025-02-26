@@ -4,13 +4,11 @@ import br.ynicollas.kits.model.Kit;
 import br.ynicollas.kits.model.KitCooldown;
 import br.ynicollas.kits.listener.InventoryCloseListener;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class CreateKitCommand implements CommandExecutor {
 
@@ -38,6 +36,7 @@ public class CreateKitCommand implements CommandExecutor {
         String cooldownStr = args[2];
 
         int cooldown;
+
         try {
             cooldown = Integer.parseInt(cooldownStr);
         } catch (NumberFormatException exception) {
@@ -46,8 +45,6 @@ public class CreateKitCommand implements CommandExecutor {
         }
 
         Inventory kitInventory = player.getServer().createInventory(null, 54, ChatColor.DARK_GRAY + "Kit");
-
-        kitInventory.addItem(new ItemStack(Material.DIAMOND_SWORD));
 
         player.openInventory(kitInventory);
 
