@@ -30,7 +30,7 @@ public class DeleteKitCommand implements CommandExecutor {
             return false;
         }
 
-        String id = args[0];
+        String id = args[0].toLowerCase();
 
         Kit kit = kits.getKit(id);
 
