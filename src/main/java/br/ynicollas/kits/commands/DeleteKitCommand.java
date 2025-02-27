@@ -1,8 +1,8 @@
 package br.ynicollas.kits.commands;
 
 import br.ynicollas.kits.model.Kit;
-import br.ynicollas.kits.storage.cooldown.CooldownStorage;
-import br.ynicollas.kits.storage.kits.KitStorage;
+import br.ynicollas.kits.storage.cooldowns.CooldownsStorage;
+import br.ynicollas.kits.storage.kits.KitsStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,12 +10,12 @@ import org.bukkit.command.CommandSender;
 
 public class DeleteKitCommand implements CommandExecutor {
 
-    private final CooldownStorage cooldownStorage;
-    private final KitStorage kitStorage;
+    private final CooldownsStorage cooldowns;
+    private final KitsStorage kits;
 
-    public DeleteKitCommand(CooldownStorage cooldownStorage, KitStorage kitStorage) {
-        this.cooldownStorage = cooldownStorage;
-        this.kitStorage = kitStorage;
+    public DeleteKitCommand(CooldownsStorage cooldowns, KitsStorage kits) {
+        this.cooldowns = cooldowns;
+        this.kits = kits;
     }
 
     @Override
@@ -25,22 +25,22 @@ public class DeleteKitCommand implements CommandExecutor {
             return false;
         }
 
-        if (!sender.hasPermission("kit.command.deletekit")) {
+        if (!sender.hasPermission("command.deletekit")) {
             sender.sendMessage(ChatColor.RED + "Você não tem permissão para executar este comando.");
             return false;
         }
 
         String id = args[0];
 
-        Kit kit = kitStorage.getKit(id);
+        Kit kit = kits.getKit(id);
 
         if (kit == null) {
             sender.sendMessage(ChatColor.RED + "Kit não encontrado!");
             return false;
         }
 
-        cooldownStorage.clear(id);
-        kitStorage.removeKit(id);
+        cooldowns.clear(id);
+        kits.removeKit(id);
 
         sender.sendMessage(ChatColor.YELLOW + "Kit deletado com sucesso.");
 

@@ -2,8 +2,8 @@ package br.ynicollas.kits.commands;
 
 import br.ynicollas.kits.model.Kit;
 import br.ynicollas.kits.model.KitCooldown;
-import br.ynicollas.kits.storage.cooldown.CooldownStorage;
-import br.ynicollas.kits.storage.kits.KitStorage;
+import br.ynicollas.kits.storage.cooldowns.CooldownsStorage;
+import br.ynicollas.kits.storage.kits.KitsStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,12 +13,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class KitCommand implements CommandExecutor {
 
-    private final CooldownStorage cooldownManager;
-    private final KitStorage kitStorage;
+    private final CooldownsStorage cooldowns;
+    private final KitsStorage kits;
 
-    public KitCommand(CooldownStorage cooldownManager, KitStorage kitStorage) {
-        this.cooldownManager = cooldownManager;
-        this.kitStorage = kitStorage;
+    public KitCommand(CooldownsStorage cooldowns, KitsStorage kits) {
+        this.cooldowns = cooldowns;
+        this.kits = kits;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class KitCommand implements CommandExecutor {
 
         String id = args[0].toLowerCase();
 
-        Kit kit = kitStorage.getKit(id);
+        Kit kit = kits.getKit(id);
 
         if (kit == null) {
             player.sendMessage(ChatColor.RED + "Kit não encontrado!");
@@ -49,8 +49,8 @@ public class KitCommand implements CommandExecutor {
             return false;
         }
 
-        if (cooldownManager.hasCooldown(player, id)) {
-            long timeRemaining = cooldownManager.getCooldown(player, id) - System.currentTimeMillis();
+        if (cooldowns.hasCooldown(player, id)) {
+            long timeRemaining = cooldowns.getCooldown(player, id) - System.currentTimeMillis();
             player.sendMessage(ChatColor.RED + "Você precisa esperar " + timeRemaining / 1000 + " segundos para usar este kit novamente.");
             return false;
         }
@@ -63,9 +63,10 @@ public class KitCommand implements CommandExecutor {
 
         KitCooldown cooldown = kit.getCooldown();
 
-        cooldownManager.removeCooldown(player, id);
+        cooldowns.removeCooldown(player, id);
+        cooldowns.addCooldown(player, id, cooldown);
 
-        cooldownManager.addCooldown(player, id, cooldown);
+        player.sendMessage(ChatColor.YELLOW + "Você coletou o kit com sucesso.");
 
         return true;
     }

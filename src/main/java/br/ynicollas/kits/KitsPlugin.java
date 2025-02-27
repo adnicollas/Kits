@@ -1,16 +1,13 @@
 package br.ynicollas.kits;
 
-import br.ynicollas.kits.cache.KitCache;
-import br.ynicollas.kits.commands.DeleteKitCommand;
-import br.ynicollas.kits.commands.KitCommand;
-import br.ynicollas.kits.commands.CreateKitCommand;
-import br.ynicollas.kits.listener.InventoryCloseListener;
+import br.ynicollas.kits.cache.CooldownsCache;
+import br.ynicollas.kits.cache.KitsCache;
+import br.ynicollas.kits.commands.core.CommandRegistry;
+import br.ynicollas.kits.listeners.core.ListenerRegistry;
 import br.ynicollas.kits.storage.Database;
-import br.ynicollas.kits.storage.kits.KitStorage;
-import br.ynicollas.kits.storage.cooldown.CooldownStorage;
-import br.ynicollas.kits.cache.CooldownCache;
+import br.ynicollas.kits.storage.cooldowns.CooldownsStorage;
+import br.ynicollas.kits.storage.kits.KitsStorage;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class KitsPlugin extends JavaPlugin {
@@ -20,25 +17,15 @@ public class KitsPlugin extends JavaPlugin {
 
     private Database database;
 
-    private CooldownStorage cooldownStorage;
-    private KitStorage kitStorage;
+    private CooldownsStorage cooldowns;
+    private KitsStorage kits;
 
     @Override
     public void onEnable() {
         INSTANCE = this;
 
-        database = new Database();
-        database.openConnection();
-
-        CooldownCache cooldownCache = new CooldownCache();
-        KitCache kitCache = new KitCache();
-
-        kitStorage = new KitStorage(database, kitCache);
-
-        cooldownStorage = new CooldownStorage(database, cooldownCache);
-
-        registerCommands();
-        registerListener();
+        initializeStorages();
+        registerComponents();
     }
 
     @Override
@@ -48,14 +35,19 @@ public class KitsPlugin extends JavaPlugin {
         }
     }
 
-    private void registerCommands() {
-        getCommand("createkit").setExecutor(new CreateKitCommand());
+    private void initializeStorages() {
+        database = new Database();
+        database.openConnection();
 
-        getCommand("deletekit").setExecutor(new DeleteKitCommand(cooldownStorage, kitStorage));
-        getCommand("kit").setExecutor(new KitCommand(cooldownStorage, kitStorage));
+        CooldownsCache cooldownsCache = new CooldownsCache();
+        KitsCache kitsCache = new KitsCache();
+
+        cooldowns = new CooldownsStorage(database, cooldownsCache);
+        kits = new KitsStorage(database, kitsCache);
     }
 
-    private void registerListener() {
-        Bukkit.getPluginManager().registerEvents(new InventoryCloseListener(kitStorage), this);
+    private void registerComponents() {
+        new CommandRegistry(this, cooldowns, kits).registerCommands();
+        new ListenerRegistry(this, kits).registerListeners();
     }
 }

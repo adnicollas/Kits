@@ -1,7 +1,7 @@
-package br.ynicollas.kits.listener;
+package br.ynicollas.kits.listeners;
 
 import br.ynicollas.kits.model.Kit;
-import br.ynicollas.kits.storage.kits.KitStorage;
+import br.ynicollas.kits.storage.kits.KitsStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -20,10 +20,10 @@ public class InventoryCloseListener implements Listener {
 
     private static final Map<String, Kit> currentKits = new HashMap<>();
 
-    private final KitStorage kitStorage;
+    private final KitsStorage kits;
 
-    public InventoryCloseListener(KitStorage kitStorage) {
-        this.kitStorage = kitStorage;
+    public InventoryCloseListener(KitsStorage kits) {
+        this.kits = kits;
     }
 
     @EventHandler
@@ -54,7 +54,7 @@ public class InventoryCloseListener implements Listener {
 
         kit.setItems(filteredItems.toArray(new ItemStack[0]));
 
-        kitStorage.saveKit(kit);
+        kits.saveKit(kit);
 
         player.sendMessage(ChatColor.YELLOW + "Kit criado com sucesso.");
 
