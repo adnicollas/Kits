@@ -56,8 +56,6 @@ public class InventoryCloseListener implements Listener {
 
         kits.saveKit(kit);
 
-        player.sendMessage(ChatColor.YELLOW + "Kit criado com sucesso.");
-
         currentKits.remove(player.getName());
     }
 
