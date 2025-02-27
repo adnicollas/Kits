@@ -37,7 +37,7 @@ public class GiveKitCommand implements CommandExecutor {
             return false;
         }
 
-        String id = args[0].toLowerCase();
+        String id = args[1].toLowerCase();
 
         Kit kit = kits.getKit(id);
 
