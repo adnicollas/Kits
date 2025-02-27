@@ -1,6 +1,6 @@
 package br.ynicollas.kits.storage.cooldown;
 
-import br.ynicollas.kits.cache.CooldownsCache;
+import br.ynicollas.kits.cache.CooldownCache;
 import br.ynicollas.kits.model.KitCooldown;
 import br.ynicollas.kits.storage.Database;
 import org.bukkit.Bukkit;
@@ -15,17 +15,18 @@ import java.util.logging.Logger;
 public class CooldownStorage {
 
     private final Database database;
-    private final CooldownsCache kitsCache;
+
+    private final CooldownCache cooldownCache;
 
     private static final Logger LOGGER = Bukkit.getLogger();
 
-    public CooldownStorage(Database database, CooldownsCache cache) {
+    public CooldownStorage(Database database, CooldownCache cooldownCache) {
         this.database = database;
-        this.kitsCache = cache;
+        this.cooldownCache = cooldownCache;
     }
 
     public void addCooldown(Player player, String kit, KitCooldown cooldown) {
-        kitsCache.addCooldown(player, kit, cooldown.getMilliseconds());
+        cooldownCache.addCooldown(player, kit, cooldown.getMilliseconds());
 
         String query = "INSERT OR REPLACE INTO cooldowns (player, kit, expire_time) VALUES (?, ?, ?)";
 
@@ -40,8 +41,8 @@ public class CooldownStorage {
     }
 
     public long getCooldown(Player player, String kitId) {
-        if (kitsCache.hasCooldown(player, kitId)) {
-            return kitsCache.getCooldown(player, kitId);
+        if (cooldownCache.hasCooldown(player, kitId)) {
+            return cooldownCache.getCooldown(player, kitId);
         }
 
         String query = "SELECT expire_time FROM cooldowns WHERE player = ? AND kit = ?";
@@ -53,7 +54,7 @@ public class CooldownStorage {
                 if (resultSet.next()) {
                     long expireTime = resultSet.getLong("expire_time");
 
-                    kitsCache.addCooldown(player, kitId, expireTime - System.currentTimeMillis());
+                    cooldownCache.addCooldown(player, kitId, expireTime - System.currentTimeMillis());
 
                     return expireTime;
                 }
@@ -66,8 +67,8 @@ public class CooldownStorage {
     }
 
     public boolean hasCooldown(Player player, String kitId) {
-        if (kitsCache.hasCooldown(player, kitId)) {
-            return kitsCache.getCooldown(player, kitId) > System.currentTimeMillis();
+        if (cooldownCache.hasCooldown(player, kitId)) {
+            return cooldownCache.getCooldown(player, kitId) > System.currentTimeMillis();
         }
 
         long cooldown = getCooldown(player, kitId);
@@ -75,7 +76,7 @@ public class CooldownStorage {
     }
 
     public void removeCooldown(Player player, String kit) {
-        kitsCache.removeCooldown(player, kit);
+        cooldownCache.removeCooldown(player, kit);
 
         String query = "DELETE FROM cooldowns WHERE player = ? AND kit = ?";
 
@@ -89,7 +90,7 @@ public class CooldownStorage {
     }
 
     public void clear(String kitId) {
-        kitsCache.removeCooldownsForKit(kitId);
+        cooldownCache.removeCooldownsForKit(kitId);
 
         String query = "DELETE FROM cooldowns WHERE kit = ?";
 
