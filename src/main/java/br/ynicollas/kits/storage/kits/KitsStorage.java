@@ -1,6 +1,6 @@
 package br.ynicollas.kits.storage.kits;
 
-import br.ynicollas.kits.cache.KitCache;
+import br.ynicollas.kits.cache.KitsCache;
 import br.ynicollas.kits.model.Kit;
 import br.ynicollas.kits.model.KitCooldown;
 import br.ynicollas.kits.storage.Database;
@@ -14,16 +14,16 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class KitStorage {
+public class KitsStorage {
 
     private final Database database;
 
-    private final KitCache kitCache;
+    private final KitsCache kitsCache;
 
     private static final Logger LOGGER = Bukkit.getLogger();
 
-    public KitStorage(Database database, KitCache kitCache) {
-        this.kitCache = kitCache;
+    public KitsStorage(Database database, KitsCache kitsCache) {
+        this.kitsCache = kitsCache;
         this.database = database;
     }
 
@@ -37,22 +37,22 @@ public class KitStorage {
             statement.setString(4, ItemSerializer.serialize(kit.getItems()));
             statement.executeUpdate();
 
-            kitCache.addKit(kit);
+            kitsCache.addKit(kit);
         } catch (SQLException exception) {
             LOGGER.log(Level.SEVERE, "Failed to save kit", exception);
         }
     }
 
-    public Kit getKit(String kitId) {
-        if (kitCache.containsKit(kitId)) {
-            return kitCache.getKit(kitId);
+    public Kit getKit(String id) {
+        if (kitsCache.containsKit(id)) {
+            return kitsCache.getKit(id);
         }
 
         String query = "SELECT * FROM kits WHERE kit = ?";
         Kit kit = null;
 
         try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
-            statement.setString(1, kitId);
+            statement.setString(1, id);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -67,9 +67,9 @@ public class KitStorage {
 
                 ItemStack[] items = ItemSerializer.deserialize(serializedItems);
 
-                kit = new Kit(kitId, permission, new KitCooldown(days, hours, minutes), items);
+                kit = new Kit(id, permission, new KitCooldown(days, hours, minutes), items);
 
-                kitCache.addKit(kit);
+                kitsCache.addKit(kit);
             }
         } catch (SQLException exception) {
             LOGGER.log(Level.SEVERE, "Failed to retrieve kit", exception);
@@ -78,14 +78,14 @@ public class KitStorage {
         return kit;
     }
 
-    public void removeKit(String kitId) {
+    public void removeKit(String id) {
         String query = "DELETE FROM kits WHERE kit = ?";
 
         try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
-            statement.setString(1, kitId);
+            statement.setString(1, id);
             statement.executeUpdate();
 
-            kitCache.removeKit(kitId);
+            kitsCache.removeKit(id);
         } catch (SQLException exception) {
             LOGGER.log(Level.SEVERE, "Failed to remove kit", exception);
         }

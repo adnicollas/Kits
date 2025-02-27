@@ -1,6 +1,6 @@
-package br.ynicollas.kits.storage.cooldown;
+package br.ynicollas.kits.storage.cooldowns;
 
-import br.ynicollas.kits.cache.CooldownCache;
+import br.ynicollas.kits.cache.CooldownsCache;
 import br.ynicollas.kits.model.KitCooldown;
 import br.ynicollas.kits.storage.Database;
 import org.bukkit.Bukkit;
@@ -12,21 +12,21 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CooldownStorage {
+public class CooldownsStorage {
 
     private final Database database;
 
-    private final CooldownCache cooldownCache;
+    private final CooldownsCache cooldownsCache;
 
     private static final Logger LOGGER = Bukkit.getLogger();
 
-    public CooldownStorage(Database database, CooldownCache cooldownCache) {
+    public CooldownsStorage(Database database, CooldownsCache cooldownsCache) {
         this.database = database;
-        this.cooldownCache = cooldownCache;
+        this.cooldownsCache = cooldownsCache;
     }
 
     public void addCooldown(Player player, String kit, KitCooldown cooldown) {
-        cooldownCache.addCooldown(player, kit, cooldown.getMilliseconds());
+        cooldownsCache.addCooldown(player, kit, cooldown.getMilliseconds());
 
         String query = "INSERT OR REPLACE INTO cooldowns (player, kit, expire_time) VALUES (?, ?, ?)";
 
@@ -40,21 +40,21 @@ public class CooldownStorage {
         }
     }
 
-    public long getCooldown(Player player, String kitId) {
-        if (cooldownCache.hasCooldown(player, kitId)) {
-            return cooldownCache.getCooldown(player, kitId);
+    public long getCooldown(Player player, String id) {
+        if (cooldownsCache.hasCooldown(player, id)) {
+            return cooldownsCache.getCooldown(player, id);
         }
 
         String query = "SELECT expire_time FROM cooldowns WHERE player = ? AND kit = ?";
 
         try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
             statement.setString(1, player.getName());
-            statement.setString(2, kitId);
+            statement.setString(2, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     long expireTime = resultSet.getLong("expire_time");
 
-                    cooldownCache.addCooldown(player, kitId, expireTime - System.currentTimeMillis());
+                    cooldownsCache.addCooldown(player, id, expireTime - System.currentTimeMillis());
 
                     return expireTime;
                 }
@@ -66,17 +66,17 @@ public class CooldownStorage {
         return 0;
     }
 
-    public boolean hasCooldown(Player player, String kitId) {
-        if (cooldownCache.hasCooldown(player, kitId)) {
-            return cooldownCache.getCooldown(player, kitId) > System.currentTimeMillis();
+    public boolean hasCooldown(Player player, String id) {
+        if (cooldownsCache.hasCooldown(player, id)) {
+            return cooldownsCache.getCooldown(player, id) > System.currentTimeMillis();
         }
 
-        long cooldown = getCooldown(player, kitId);
+        long cooldown = getCooldown(player, id);
         return cooldown > System.currentTimeMillis();
     }
 
     public void removeCooldown(Player player, String kit) {
-        cooldownCache.removeCooldown(player, kit);
+        cooldownsCache.removeCooldown(player, kit);
 
         String query = "DELETE FROM cooldowns WHERE player = ? AND kit = ?";
 
@@ -89,13 +89,13 @@ public class CooldownStorage {
         }
     }
 
-    public void clear(String kitId) {
-        cooldownCache.removeCooldownsForKit(kitId);
+    public void clear(String id) {
+        cooldownsCache.removeCooldownsForKit(id);
 
         String query = "DELETE FROM cooldowns WHERE kit = ?";
 
         try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
-            statement.setString(1, kitId);
+            statement.setString(1, id);
             statement.executeUpdate();
         } catch (SQLException exception) {
             LOGGER.log(Level.SEVERE, "Failed to clear cooldowns", exception);
