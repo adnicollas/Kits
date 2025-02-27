@@ -1,7 +1,7 @@
 package br.ynicollas.kits.commands;
 
-import br.ynicollas.kits.model.Kit;
-import br.ynicollas.kits.model.KitCooldown;
+import br.ynicollas.kits.models.Kit;
+import br.ynicollas.kits.models.KitCooldown;
 import br.ynicollas.kits.listeners.InventoryCloseListener;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

@@ -1,8 +1,8 @@
 package br.ynicollas.kits.storage.kits;
 
 import br.ynicollas.kits.cache.KitsCache;
-import br.ynicollas.kits.model.Kit;
-import br.ynicollas.kits.model.KitCooldown;
+import br.ynicollas.kits.models.Kit;
+import br.ynicollas.kits.models.KitCooldown;
 import br.ynicollas.kits.storage.Database;
 import br.ynicollas.kits.util.ItemSerializer;
 import org.bukkit.Bukkit;

@@ -1,6 +1,6 @@
 package br.ynicollas.kits.cache;
 
-import br.ynicollas.kits.model.Kit;
+import br.ynicollas.kits.models.Kit;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,7 +1,7 @@
 package br.ynicollas.kits.storage.cooldowns;
 
 import br.ynicollas.kits.cache.CooldownsCache;
-import br.ynicollas.kits.model.KitCooldown;
+import br.ynicollas.kits.models.KitCooldown;
 import br.ynicollas.kits.storage.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -1,6 +1,6 @@
 package br.ynicollas.kits.commands;
 
-import br.ynicollas.kits.model.Kit;
+import br.ynicollas.kits.models.Kit;
 import br.ynicollas.kits.storage.kits.KitsStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

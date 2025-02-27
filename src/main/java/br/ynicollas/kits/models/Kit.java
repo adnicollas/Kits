@@ -1,4 +1,4 @@
-package br.ynicollas.kits.model;
+package br.ynicollas.kits.models;
 
 import lombok.Getter;
 
