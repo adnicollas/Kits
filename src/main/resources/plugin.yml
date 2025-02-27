@@ -1,5 +1,5 @@
 name: Kits
-version: 1.0.0
+version: 1.0.1
 main: br.ynicollas.kits.KitsPlugin
 author: yNicollas
 commands:
@@ -9,6 +9,8 @@ commands:
     aliases: [delkit]
   editkit:
     aliases: [editarkit]
+  givekit:
+    aliases: [darkit]
   kit:
     aliases: []
   viewkit:
