@@ -1,5 +1,6 @@
 package br.ynicollas.kits;
 
+import br.ynicollas.kits.cache.KitCache;
 import br.ynicollas.kits.commands.DeleteKitCommand;
 import br.ynicollas.kits.commands.KitCommand;
 import br.ynicollas.kits.commands.CreateKitCommand;
@@ -7,7 +8,7 @@ import br.ynicollas.kits.listener.InventoryCloseListener;
 import br.ynicollas.kits.storage.Database;
 import br.ynicollas.kits.storage.kits.KitStorage;
 import br.ynicollas.kits.storage.cooldown.CooldownStorage;
-import br.ynicollas.kits.cache.CooldownsCache;
+import br.ynicollas.kits.cache.CooldownCache;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,11 +30,12 @@ public class KitsPlugin extends JavaPlugin {
         database = new Database();
         database.openConnection();
 
-        CooldownsCache kitsCache = new CooldownsCache();
+        CooldownCache cooldownCache = new CooldownCache();
+        KitCache kitCache = new KitCache();
 
-        kitStorage = new KitStorage(database);
+        kitStorage = new KitStorage(database, kitCache);
 
-        cooldownStorage = new CooldownStorage(database, kitsCache);
+        cooldownStorage = new CooldownStorage(database, cooldownCache);
 
         registerCommands();
         registerListener();
