@@ -1,4 +1,4 @@
-package br.ynicollas.kits.commands.core;
+package br.ynicollas.kits.registry;
 
 import br.ynicollas.kits.commands.*;
 import br.ynicollas.kits.storage.cooldowns.CooldownsStorage;

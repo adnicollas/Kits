@@ -1,4 +1,4 @@
-package br.ynicollas.kits.listeners.core;
+package br.ynicollas.kits.registry;
 
 import br.ynicollas.kits.listeners.InventoryClickListener;
 import br.ynicollas.kits.listeners.InventoryCloseListener;
