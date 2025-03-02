@@ -25,7 +25,6 @@ public class Database {
         }
 
         File databaseFile = new File(folder, "kits.db");
-
         return "jdbc:sqlite:" + databaseFile.getAbsolutePath();
     }
 
@@ -43,16 +42,6 @@ public class Database {
         }
     }
 
-    public void createTables() {
-        try (Connection connection = DriverManager.getConnection(DATABASE_URL);
-             Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS kits (kit TEXT PRIMARY KEY, permission TEXT, cooldown INTEGER, content TEXT)");
-            statement.execute("CREATE TABLE IF NOT EXISTS cooldowns (player TEXT, kit TEXT, expire_time INTEGER, PRIMARY KEY(player, kit))");
-        } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to create database tables.");
-        }
-    }
-
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -60,6 +49,15 @@ public class Database {
             }
         } catch (SQLException exception) {
             LOGGER.log(Level.SEVERE, "Failed to close database connection.", exception);
+        }
+    }
+
+    private void createTables() {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("CREATE TABLE IF NOT EXISTS kits (kit TEXT PRIMARY KEY, permission TEXT, cooldown INTEGER, content TEXT)");
+            statement.execute("CREATE TABLE IF NOT EXISTS cooldowns (player TEXT, kit TEXT, expire_time INTEGER, PRIMARY KEY(player, kit))");
+        } catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Failed to create database tables.", exception);
         }
     }
 }

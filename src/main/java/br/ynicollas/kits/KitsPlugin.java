@@ -2,9 +2,10 @@ package br.ynicollas.kits;
 
 import br.ynicollas.kits.cache.CooldownsCache;
 import br.ynicollas.kits.cache.KitsCache;
-import br.ynicollas.kits.commands.core.CommandRegistry;
-import br.ynicollas.kits.listeners.core.ListenerRegistry;
+import br.ynicollas.kits.registry.CommandRegistry;
+import br.ynicollas.kits.registry.ListenerRegistry;
 import br.ynicollas.kits.storage.Database;
+import br.ynicollas.kits.storage.SQLiteLoader;
 import br.ynicollas.kits.storage.cooldowns.CooldownsStorage;
 import br.ynicollas.kits.storage.kits.KitsStorage;
 import lombok.Getter;
@@ -24,6 +25,8 @@ public class KitsPlugin extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
 
+        downloadSQLite();
+
         initializeStorages();
         registerComponents();
     }
@@ -35,7 +38,14 @@ public class KitsPlugin extends JavaPlugin {
         }
     }
 
+    private void downloadSQLite() {
+        SQLiteLoader loader = new SQLiteLoader(this);
+
+        loader.downloadIfNecessary();
+    }
+
     private void initializeStorages() {
+
         database = new Database();
         database.openConnection();
 
