@@ -42,7 +42,7 @@ public class EditKitCommand implements CommandExecutor {
         Kit kit = kits.getKit(id);
 
         if (kit == null) {
-            player.sendMessage(ChatColor.RED + "O kit '" + id + "' não existe.");
+            player.sendMessage(ChatColor.RED + "O kit " + id + " não existe.");
             return false;
         }
 
@@ -56,7 +56,7 @@ public class EditKitCommand implements CommandExecutor {
 
         InventoryCloseListener.setCurrentKit(player, kit);
 
-        player.sendMessage(ChatColor.YELLOW + "Você editou o kit com sucesso.");
+        player.sendMessage(ChatColor.YELLOW + "Você editou o kit com sucesso!");
 
         return true;
     }

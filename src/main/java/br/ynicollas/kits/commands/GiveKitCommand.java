@@ -42,7 +42,7 @@ public class GiveKitCommand implements CommandExecutor {
         Kit kit = kits.getKit(id);
 
         if (kit == null) {
-            sender.sendMessage(ChatColor.RED + "O kit '" + id + "' não existe.");
+            sender.sendMessage(ChatColor.RED + "O kit " + id + " não existe.");
             return false;
         }
 
@@ -52,7 +52,7 @@ public class GiveKitCommand implements CommandExecutor {
             }
         }
 
-        sender.sendMessage(ChatColor.YELLOW + "Kit enviado com sucesso.");
+        sender.sendMessage(ChatColor.YELLOW + "Kit enviado com sucesso!");
 
         return true;
     }

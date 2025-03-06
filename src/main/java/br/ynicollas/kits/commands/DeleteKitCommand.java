@@ -42,7 +42,7 @@ public class DeleteKitCommand implements CommandExecutor {
         cooldowns.clear(id);
         kits.removeKit(id);
 
-        sender.sendMessage(ChatColor.YELLOW + "Kit deletado com sucesso.");
+        sender.sendMessage(ChatColor.YELLOW + "Kit deletado com sucesso!");
 
         return true;
     }

@@ -22,7 +22,7 @@ public class CreateKitCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (args.length != 3) {
-            player.sendMessage(ChatColor.RED + "Uso correto: /criarkit <id> <permissão> <cooldown>");
+            player.sendMessage(ChatColor.RED + "Uso correto: /criarkit <nome> <permissão> <tempo>");
             return false;
         }
 
@@ -54,7 +54,7 @@ public class CreateKitCommand implements CommandExecutor {
 
         InventoryCloseListener.setCurrentKit(player, kit);
 
-        player.sendMessage(ChatColor.YELLOW + "Kit criado com sucesso.");
+        player.sendMessage(ChatColor.YELLOW + "Kit criado com sucesso!");
 
         return true;
     }
