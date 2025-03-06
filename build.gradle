@@ -3,19 +3,23 @@ plugins {
 }
 
 group = 'br.ynicollas'
-version = '1.0.4'
+version = '1.0.5'
 
 repositories {
     mavenCentral()
+
+    // spigot
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
 }
 
 dependencies {
-    compileOnly fileTree('libs')
-
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     compileOnly 'org.xerial:sqlite-jdbc:3.49.1.0'
 
-    compileOnly 'org.projectlombok:lombok:1.18.36'
-    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    def lombok = 'org.projectlombok:lombok:1.18.36'
+
+    compileOnly lombok
+    annotationProcessor lombok
 }
 
 compileJava {

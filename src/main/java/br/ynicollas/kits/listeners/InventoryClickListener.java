@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 
 public class InventoryClickListener implements Listener {
 
@@ -15,9 +14,9 @@ public class InventoryClickListener implements Listener {
             return;
         }
 
-        Inventory inventory = event.getInventory();
+        String title = event.getView().getTitle();
 
-        if (inventory.getName().equals(ChatColor.DARK_GRAY + "Visualizando")) {
+        if (title.equals(ChatColor.DARK_GRAY + "Visualizando")) {
             event.setCancelled(true);
         }
     }

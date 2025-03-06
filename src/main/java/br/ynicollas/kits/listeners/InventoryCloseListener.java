@@ -30,7 +30,9 @@ public class InventoryCloseListener implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         Inventory inventory = event.getInventory();
 
-        if (!inventory.getName().equals(ChatColor.DARK_GRAY + "Kit")) {
+        String title = event.getView().getTitle();
+
+        if (!title.equals(ChatColor.DARK_GRAY + "Kit")) {
             return;
         }
 
