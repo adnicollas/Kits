@@ -12,10 +12,13 @@ A powerful and customizable Minecraft Kits plugin that allows players to easily 
 2. Place the .jar file into your server's plugins folder.
 3. Restart or reload the server.
 
-| Command              | Description               | Permission   |
-| -------------------- | ------------------------- | ------------ |
-| `/kit <name>`        | Gives the specified kit   | `kits.use`   |
-| `/kit reload`        | Reloads the configuration | `kits.admin` |
-| `/kit list`          | Lists all available kits  | `kits.list`  |
-| `/kit create <name>` | Creates a new kit         | `kits.admin` |
-| `/kit remove <name>` | Deletes a kit             | `kits.admin` |
+# 📜 Commands & Permissions
+| Command                          | Description                                | Permission   |
+| -------------------------------- | ------------------------------------------ | ------------ |
+| `/createkit <id> <permission> <cooldown>` | Creates a new kit with a specific ID, permission, and cooldown | `command.createkit` |
+| `/deletekit <id>`                | Deletes an existing kit by its ID         | `command.deletekit` |
+| `/editkit <id>`                  | Modifies an existing kit                  | `command.editkit` |
+| `/givekit <player> <id>`         | Gives a specific kit to a player          | `command.givekit` |
+| `/kit <id>`                      | Claims an available kit                   | ``   |
+| `/viewkit <id>`                  | Previews the contents of a kit            | ``   |
+
