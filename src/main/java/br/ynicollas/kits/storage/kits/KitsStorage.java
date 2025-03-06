@@ -4,7 +4,7 @@ import br.ynicollas.kits.cache.KitsCache;
 import br.ynicollas.kits.models.Kit;
 import br.ynicollas.kits.models.KitCooldown;
 import br.ynicollas.kits.storage.Database;
-import br.ynicollas.kits.util.ItemSerializer;
+import br.ynicollas.kits.serializer.ItemSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
