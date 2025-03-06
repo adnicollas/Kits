@@ -17,8 +17,8 @@ A powerful and customizable Minecraft Kits plugin that allows players to easily 
 | -------------------------------- | ------------------------------------------ | ------------ |
 | `/createkit <id> <permission> <cooldown>` | Creates a new kit with a specific ID, permission, and cooldown | `command.createkit` |
 | `/deletekit <id>`                | Deletes an existing kit by its ID         | `command.deletekit` |
-| `/editkit <id>`                  | Modifies an existing kit                  | `command.editkit` |
+| `/editkit <id>`                  | Modifies the contents of an existing kit                  | `command.editkit` |
 | `/givekit <player> <id>`         | Gives a specific kit to a player          | `command.givekit` |
-| `/kit <id>`                      | Claims an available kit                   | ``   |
-| `/viewkit <id>`                  | Previews the contents of a kit            | ``   |
+| `/kit <id>`                      | Claims an available kit                   ||
+| `/viewkit <id>`                  | Previews the contents of a kit            ||
 
