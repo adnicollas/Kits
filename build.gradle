@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'br.ynicollas'
-version = '1.0.3'
+version = '1.0.4'
 
 repositories {
     mavenCentral()
@@ -12,12 +12,15 @@ repositories {
 dependencies {
     compileOnly fileTree('libs')
 
-    implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
+    compileOnly 'org.xerial:sqlite-jdbc:3.49.1.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
 
 compileJava {
-    options.encoding('UTF-8')
+    options.encoding= 'UTF-8'
+
+    targetCompatibility = '1.8'
+    sourceCompatibility = '1.8'
 }
