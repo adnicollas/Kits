@@ -1,7 +1,10 @@
 name: Kits
-version: 1.0.3
+version: 1.0.4
 main: br.ynicollas.kits.KitsPlugin
 author: yNicollas
+website: https://github.com/adnicollas
+api-version: '1.13'
+load: STARTUP
 commands:
   createkit:
     aliases: [criarkit]
