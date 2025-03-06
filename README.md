@@ -22,3 +22,14 @@ A powerful and customizable Minecraft Kits plugin that allows players to easily 
 | `/kit <id>`                      | Claims an available kit                   ||
 | `/viewkit <id>`                  | Previews the contents of a kit            ||
 
+# 🔗 Dependencies
+Bukkit/Spigot/Paper [1.8.x - 1.16.5]
+
+# 💡 Future Plans
+GUI for selecting kits;
+Economy integration;
+More customizable options.
+
+# 🤝 Contributing
+
+Contributions are welcome! Feel free to open an issue or submit a pull request.
