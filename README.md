@@ -26,9 +26,9 @@ A powerful and customizable Minecraft Kits plugin that allows players to easily 
 Bukkit/Spigot/Paper [1.8.x - 1.16.5]
 
 # 💡 Future Plans
-GUI for selecting kits;
-Economy integration;
-More customizable options.
+- GUI for selecting kits;
+- Economy integration;
+- More customizable options.
 
 # 🤝 Contributing
 
