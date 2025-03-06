@@ -1,17 +1,19 @@
-# 🛠️ About
+# Minecraft Kits Plugin
+
+## 🛠️ About
 A powerful and customizable Minecraft Kits plugin that allows players to easily access predefined kits with items, tools, and armor.
 
-# ✨ Features
+## ✨ Features
 - Customizable kits;
 - Easy-to-use commands for players and admins;
 - Permissions support for different kit access levels.
 
-# 📥 Installation
+## 📥 Installation
 1. Download the latest release of the plugin.
 2. Place the .jar file into your server's plugins folder.
 3. Restart or reload the server.
 
-# 📜 Commands & Permissions
+## 📜 Commands & Permissions
 | Command                          | Description                                | Permission   |
 | -------------------------------- | ------------------------------------------ | ------------ |
 | `/createkit <id> <permission> <cooldown>` | Creates a new kit with a specific ID, permission, and cooldown | `command.createkit` |
@@ -21,10 +23,10 @@ A powerful and customizable Minecraft Kits plugin that allows players to easily 
 | `/kit <id>`                      | Claims an available kit                   ||
 | `/viewkit <id>`                  | Previews the contents of a kit            ||
 
-# 🔗 Dependencies
+## 🔗 Dependencies
 Bukkit/Spigot/Paper [1.8.x - 1.16.5]
 
-# 💡 Future Plans
+## 💡 Future Plans
 - GUI for selecting kits;
 - Economy integration;
 - More customizable options.
@@ -32,5 +34,5 @@ Bukkit/Spigot/Paper [1.8.x - 1.16.5]
 # 📄 License
 This software is released under the MIT License.
 
-# 🤝 Contributing
+## 🤝 Contributing
 Contributions are welcome! Feel free to open an issue or submit a pull request.
