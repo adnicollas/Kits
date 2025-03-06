@@ -11,7 +11,7 @@ A powerful and customizable Minecraft Kits plugin that allows players to easily 
 ## 📥 Installation
 1. Download the latest release of the plugin;
 2. Place the .jar file into your server's plugins folder;
-3. Restart or reload the server.
+3. Restart the server.
 
 ## 📜 Commands & Permissions
 | Command                          | Description                                | Permission   |
@@ -24,7 +24,11 @@ A powerful and customizable Minecraft Kits plugin that allows players to easily 
 | `/viewkit <id>`                  | Previews the contents of a kit            ||
 
 ## 🔗 Dependencies
-Bukkit/Spigot/Paper [1.8.x - 1.16.5]
+Bukkit/Spigot/Paper [1.8 - 1.16.5]
+
+## 🛠️ Technologies Used
+- **SQLite** (using [Xerial SQLite JDBC](https://github.com/xerial/sqlite-jdbc)) for storing kit data.
+- **Lombok** for simplifying code with annotations like @Getter, @Setter, and @AllArgsConstructor.
 
 ## 💡 Future Plans
 - GUI for selecting kits;
