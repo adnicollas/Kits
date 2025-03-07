@@ -24,7 +24,7 @@ A powerful and customizable Minecraft Kits plugin that allows players to easily 
 | `/viewkit <id>`                  | Previews the contents of a kit            ||
 
 ## 🔗 Dependencies
-Bukkit/Spigot/Paper [1.8 - 1.16.5]
+- **Bukkit/Spigot/Paper**: Compatible with versions 1.8 to 1.16.5.
 
 ## 🛠️ Technologies Used
 - **SQLite** (using [Xerial SQLite JDBC](https://github.com/xerial/sqlite-jdbc)) for storing kit data;
