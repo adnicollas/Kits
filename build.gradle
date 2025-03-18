@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'br.ynicollas'
-version = '1.0.5'
+version = '1.0.6'
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ dependencies {
 }
 
 compileJava {
-    options.encoding= 'UTF-8'
+    options.encoding = 'UTF-8'
 
     targetCompatibility = '1.8'
     sourceCompatibility = '1.8'
