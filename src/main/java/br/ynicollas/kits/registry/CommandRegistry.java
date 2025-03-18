@@ -1,18 +1,19 @@
 package br.ynicollas.kits.registry;
 
+import br.ynicollas.kits.KitsPlugin;
 import br.ynicollas.kits.commands.*;
 import br.ynicollas.kits.storage.cooldowns.CooldownsStorage;
 import br.ynicollas.kits.storage.kits.KitsStorage;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.command.PluginCommand;
 
 public class CommandRegistry {
-    private final JavaPlugin plugin;
+    private final KitsPlugin plugin;
 
     private final CooldownsStorage cooldowns;
     private final KitsStorage kits;
 
-    public CommandRegistry(JavaPlugin plugin, CooldownsStorage cooldowns, KitsStorage kits) {
+    public CommandRegistry(KitsPlugin plugin, CooldownsStorage cooldowns, KitsStorage kits) {
         this.plugin = plugin;
         this.cooldowns = cooldowns;
         this.kits = kits;
@@ -28,10 +29,13 @@ public class CommandRegistry {
     }
 
     private void register(String command, CommandExecutor executor) {
-        if (plugin.getCommand(command) != null) {
-            plugin.getCommand(command).setExecutor(executor);
-        } else {
-            plugin.getLogger().warning("Comando '" + command + "' não registrado no plugin.yml!");
+        PluginCommand pluginCommand = plugin.getCommand(command);
+
+        if (pluginCommand == null) {
+            plugin.getLogger().warning("Comando " + command + " não registrado no plugin.yml!");
+            return;
         }
+
+        pluginCommand.setExecutor(executor);
     }
 }
