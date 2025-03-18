@@ -1,7 +1,6 @@
 package br.ynicollas.kits.storage;
 
 import br.ynicollas.kits.KitsPlugin;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -9,7 +8,6 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Getter
 public class Database {
 
     private Connection connection;
@@ -42,6 +40,19 @@ public class Database {
                 LOGGER.log(Level.SEVERE, "Failed to open database connection.", exception);
             }
         }
+    }
+
+    public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                openConnection();
+            }
+
+        } catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Error checking database connection.", exception);
+        }
+
+        return connection;
     }
 
     public void closeConnection() {

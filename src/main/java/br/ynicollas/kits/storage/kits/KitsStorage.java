@@ -39,8 +39,6 @@ public class KitsStorage {
             statement.setLong(3, kit.getCooldown().getMilliseconds());
             statement.setString(4, ItemSerializer.serialize(kit.getItems()));
 
-            statement.executeUpdate();
-
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows > 0) {
@@ -94,7 +92,6 @@ public class KitsStorage {
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, id);
-            statement.executeUpdate();
 
             int affectedRows = statement.executeUpdate();
 

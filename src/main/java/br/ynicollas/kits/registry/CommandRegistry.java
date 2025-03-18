@@ -20,7 +20,7 @@ public class CommandRegistry {
     }
 
     public void registerCommands() {
-        register("createkit", new CreateKitCommand());
+        register("createkit", new CreateKitCommand(kits));
         register("givekit", new GiveKitCommand(kits));
         register("deletekit", new DeleteKitCommand(cooldowns, kits));
         register("editkit", new EditKitCommand(kits));

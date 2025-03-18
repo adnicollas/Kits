@@ -89,7 +89,6 @@ public class CooldownsStorage {
 
             statement.setString(1, player.getName());
             statement.setString(2, kit);
-            statement.executeUpdate();
 
             int affectedRows = statement.executeUpdate();
 
