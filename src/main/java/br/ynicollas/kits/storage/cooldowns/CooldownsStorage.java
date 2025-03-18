@@ -6,6 +6,7 @@ import br.ynicollas.kits.storage.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,13 +31,18 @@ public class CooldownsStorage {
 
         String query = "INSERT OR REPLACE INTO cooldowns (player, kit, expire_time) VALUES (?, ?, ?)";
 
-        try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            long expireTime = System.currentTimeMillis() + cooldown.getMilliseconds();
+
             statement.setString(1, player.getName());
             statement.setString(2, kit);
-            statement.setLong(3, System.currentTimeMillis() + cooldown.getMilliseconds());
+            statement.setLong(3, expireTime);
             statement.executeUpdate();
+
         } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to set cooldown", exception);
+            LOGGER.log(Level.SEVERE, "Failed to set cooldown for player: " + player.getName(), exception);
         }
     }
 
@@ -47,9 +53,12 @@ public class CooldownsStorage {
 
         String query = "SELECT expire_time FROM cooldowns WHERE player = ? AND kit = ?";
 
-        try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setString(1, player.getName());
             statement.setString(2, id);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     long expireTime = resultSet.getLong("expire_time");
@@ -59,46 +68,55 @@ public class CooldownsStorage {
                     return expireTime;
                 }
             }
+
         } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to get cooldown for player", exception);
+            LOGGER.log(Level.SEVERE, "Failed to get cooldown for player: " + player.getName(), exception);
         }
 
         return 0;
     }
 
-    public boolean hasCooldown(Player player, String id) {
-        if (cooldownsCache.hasCooldown(player, id)) {
-            return cooldownsCache.getCooldown(player, id) > System.currentTimeMillis();
-        }
-
-        long cooldown = getCooldown(player, id);
+    public boolean hasCooldown(Player player, String kit) {
+        long cooldown = getCooldown(player, kit);
         return cooldown > System.currentTimeMillis();
     }
 
     public void removeCooldown(Player player, String kit) {
-        cooldownsCache.removeCooldown(player, kit);
-
         String query = "DELETE FROM cooldowns WHERE player = ? AND kit = ?";
 
-        try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setString(1, player.getName());
             statement.setString(2, kit);
             statement.executeUpdate();
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                cooldownsCache.removeCooldown(player, kit);
+            }
+
         } catch (SQLException exception) {
             LOGGER.log(Level.SEVERE, "Failed to remove cooldown for player", exception);
         }
     }
 
-    public void clear(String id) {
-        cooldownsCache.removeCooldownsForKit(id);
-
+    public void clear(String kit) {
         String query = "DELETE FROM cooldowns WHERE kit = ?";
 
-        try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
-            statement.setString(1, id);
-            statement.executeUpdate();
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, kit);
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                cooldownsCache.removeCooldownsForKit(kit);
+            }
+
         } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to clear cooldowns", exception);
+            LOGGER.log(Level.SEVERE, "Failed to clear cooldowns for kit: " + kit, exception);
         }
     }
 }

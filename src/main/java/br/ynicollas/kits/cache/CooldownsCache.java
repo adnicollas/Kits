@@ -1,8 +1,7 @@
 package br.ynicollas.kits.cache;
 
 import org.bukkit.entity.Player;
-
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,15 +22,16 @@ public class CooldownsCache {
     }
 
     public void removeCooldownsForKit(String id) {
-        cooldownsCache.forEach((name, kitMap) -> kitMap.remove(id));
+        cooldownsCache.values().forEach(kitMap -> kitMap.remove(id));
     }
 
     public boolean hasCooldown(Player player, String id) {
-        return cooldownsCache.containsKey(player.getName()) &&
-                cooldownsCache.get(player.getName()).getOrDefault(id, 0L) > System.currentTimeMillis();
+        Map<String, Long> kitMap = cooldownsCache.get(player.getName());
+
+        return kitMap != null && kitMap.getOrDefault(id, 0L) > System.currentTimeMillis();
     }
 
     public long getCooldown(Player player, String id) {
-        return cooldownsCache.getOrDefault(player.getName(), new HashMap<>()).getOrDefault(id, 0L);
+        return cooldownsCache.getOrDefault(player.getName(), Collections.emptyMap()).getOrDefault(id, 0L);
     }
 }

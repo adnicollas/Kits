@@ -5,9 +5,11 @@ import br.ynicollas.kits.models.Kit;
 import br.ynicollas.kits.models.KitCooldown;
 import br.ynicollas.kits.storage.Database;
 import br.ynicollas.kits.serializer.ItemSerializer;
+import br.ynicollas.kits.util.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +19,6 @@ import java.util.logging.Logger;
 public class KitsStorage {
 
     private final Database database;
-
     private final KitsCache kitsCache;
 
     private static final Logger LOGGER = Bukkit.getLogger();
@@ -30,16 +31,24 @@ public class KitsStorage {
     public void saveKit(Kit kit) {
         String query = "INSERT OR REPLACE INTO kits (kit, permission, cooldown, content) VALUES (?, ?, ?, ?)";
 
-        try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setString(1, kit.getId());
             statement.setString(2, kit.getPermission());
             statement.setLong(3, kit.getCooldown().getMilliseconds());
             statement.setString(4, ItemSerializer.serialize(kit.getItems()));
+
             statement.executeUpdate();
 
-            kitsCache.addKit(kit);
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                kitsCache.addKit(kit);
+            }
+
         } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to save kit", exception);
+            LOGGER.log(Level.SEVERE, "Failed to save kit: " + kit.getId(), exception);
         }
     }
 
@@ -49,45 +58,52 @@ public class KitsStorage {
         }
 
         String query = "SELECT * FROM kits WHERE kit = ?";
-        Kit kit = null;
 
-        try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setString(1, id);
 
-            ResultSet resultSet = statement.executeQuery();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String permission = resultSet.getString("permission");
+                    long cooldownInMillis = resultSet.getLong("cooldown");
+                    String serializedItems = resultSet.getString("content");
 
-            if (resultSet.next()) {
-                String permission = resultSet.getString("permission");
-                long cooldownInMillis = resultSet.getLong("cooldown");
-                String serializedItems = resultSet.getString("content");
+                    KitCooldown cooldown = TimeUtils.convertToCooldown(cooldownInMillis);
+                    ItemStack[] items = ItemSerializer.deserialize(serializedItems);
 
-                int days = (int) (cooldownInMillis / 86_400_000L);
-                int hours = (int) ((cooldownInMillis % 86_400_000L) / 3_600_000L);
-                int minutes = (int) ((cooldownInMillis % 3_600_000L) / 60_000L);
+                    Kit kit = new Kit(id, permission, cooldown, items);
 
-                ItemStack[] items = ItemSerializer.deserialize(serializedItems);
+                    kitsCache.addKit(kit);
 
-                kit = new Kit(id, permission, new KitCooldown(days, hours, minutes), items);
-
-                kitsCache.addKit(kit);
+                    return kit;
+                }
             }
         } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to retrieve kit", exception);
+            LOGGER.log(Level.SEVERE, "Failed to retrieve kit: " + id, exception);
         }
 
-        return kit;
+        return null;
     }
 
     public void removeKit(String id) {
         String query = "DELETE FROM kits WHERE kit = ?";
 
-        try (PreparedStatement statement = database.getConnection().prepareStatement(query)) {
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setString(1, id);
             statement.executeUpdate();
 
-            kitsCache.removeKit(id);
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                kitsCache.removeKit(id);
+            }
+
         } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to remove kit", exception);
+            LOGGER.log(Level.SEVERE, "Failed to remove kit: " + id, exception);
         }
     }
 }

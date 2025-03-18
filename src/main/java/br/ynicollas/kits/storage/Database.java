@@ -29,30 +29,41 @@ public class Database {
     }
 
     public void openConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                Class.forName("org.sqlite.JDBC");
+        synchronized (this) {
+            try {
+                if (connection == null || connection.isClosed()) {
+                    Class.forName("org.sqlite.JDBC");
 
-                connection = DriverManager.getConnection(DATABASE_URL);
+                    connection = DriverManager.getConnection(DATABASE_URL);
 
-                createTables();
+                    createTables();
+                }
+            } catch (ClassNotFoundException | SQLException exception) {
+                LOGGER.log(Level.SEVERE, "Failed to open database connection.", exception);
             }
-        } catch (ClassNotFoundException | SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to open database connection.", exception);
         }
     }
 
     public void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
+        synchronized (this) {
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    connection.close();
+                    connection = null;
+                }
+
+            } catch (SQLException exception) {
+                LOGGER.log(Level.SEVERE, "Failed to close database connection.", exception);
             }
-        } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to close database connection.", exception);
         }
     }
 
     private void createTables() {
+        if (connection == null) {
+            LOGGER.log(Level.SEVERE, "Cannot create tables: No database connection.");
+            return;
+        }
+
         try (Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS kits (kit TEXT PRIMARY KEY, permission TEXT, cooldown INTEGER, content TEXT)");
             statement.execute("CREATE TABLE IF NOT EXISTS cooldowns (player TEXT, kit TEXT, expire_time INTEGER, PRIMARY KEY(player, kit))");
