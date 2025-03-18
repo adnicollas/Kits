@@ -1,8 +1,18 @@
 package br.ynicollas.kits.util;
 
+import br.ynicollas.kits.models.KitCooldown;
+
 import java.util.concurrent.TimeUnit;
 
-public class TimeFormatter {
+public class TimeUtils {
+
+    public static KitCooldown convertToCooldown(long milliseconds) {
+        int days = (int) TimeUnit.MILLISECONDS.toDays(milliseconds);
+        int hours = (int) TimeUnit.MILLISECONDS.toHours(milliseconds) % 24;
+        int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(milliseconds) % 60;
+        return new KitCooldown(days, hours, minutes);
+    }
+
     public static String format(long millis) {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60;
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;

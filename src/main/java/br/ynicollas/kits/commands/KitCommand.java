@@ -4,7 +4,7 @@ import br.ynicollas.kits.models.Kit;
 import br.ynicollas.kits.models.KitCooldown;
 import br.ynicollas.kits.storage.cooldowns.CooldownsStorage;
 import br.ynicollas.kits.storage.kits.KitsStorage;
-import br.ynicollas.kits.util.TimeFormatter;
+import br.ynicollas.kits.util.TimeUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,7 +52,7 @@ public class KitCommand implements CommandExecutor {
 
         if (cooldowns.hasCooldown(player, id) && !player.hasPermission("kit.bypass")) {
             long timeRemaining = cooldowns.getCooldown(player, id) - System.currentTimeMillis();
-            player.sendMessage(ChatColor.RED + "Você precisa esperar " + TimeFormatter.format(timeRemaining) + " para pegar este kit novamente.");
+            player.sendMessage(ChatColor.RED + "Você precisa esperar " + TimeUtils.format(timeRemaining) + " para pegar este kit novamente.");
             return false;
         }
 
