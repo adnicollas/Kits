@@ -3,6 +3,7 @@ package br.ynicollas.kits.commands;
 import br.ynicollas.kits.models.Kit;
 import br.ynicollas.kits.models.KitCooldown;
 import br.ynicollas.kits.listeners.InventoryCloseListener;
+import br.ynicollas.kits.storage.kits.KitsStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,6 +12,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 public class CreateKitCommand implements CommandExecutor {
+
+    private final KitsStorage kits;
+
+    public CreateKitCommand(KitsStorage kits) {
+        this.kits = kits;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -34,6 +41,13 @@ public class CreateKitCommand implements CommandExecutor {
         String id = args[0].toLowerCase();
         String permission = args[1];
         String cooldownStr = args[2];
+
+        Kit existingKit = kits.getKit(id);
+
+        if (existingKit != null) {
+            player.sendMessage(ChatColor.RED + "Já existe um kit com esse nome.");
+            return false;
+        }
 
         int cooldown;
 
