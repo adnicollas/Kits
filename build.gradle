@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'br.ynicollas'
-version = '1.0.6'
+version = '1.0.7'
 
 repositories {
     mavenCentral()
@@ -16,7 +16,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     compileOnly 'org.xerial:sqlite-jdbc:3.49.1.0'
 
-    def lombok = 'org.projectlombok:lombok:1.18.36'
+    def lombok = 'org.projectlombok:lombok:1.18.38'
 
     compileOnly lombok
     annotationProcessor lombok
